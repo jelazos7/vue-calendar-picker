@@ -9,7 +9,7 @@
 						<span
 							v-for="range in [getItemRange(df_setMinutes(current, (y-1) + (x-1)*15 ), PERIOD.MINUTE)]"
 							v-data:item="[+range.start/10000, PERIOD.MINUTE]"
-							:class="[ { today: df_isSameMinute(today, range.start) }, itemClass(range, PERIOD.MINUTE) ]"
+							:class="[ { today: df_isSameMinute(today, range.start), selected: df_isSameMinute(today, range.start) },  itemClass(range, PERIOD.MINUTE) ]"
 						>
 							<div class="cellHead">{{df_format(range.start, 'mm')}}</div>
 							<slot :item-range="range" :layout="viewLayout[view]"></slot>
@@ -24,7 +24,7 @@
 						<span
 							v-for="range in [getItemRange(df_setHours(current, (y-1) + (x-1)*12 ), PERIOD.HOUR)]"
 							v-data:item="[+range.start/10000, PERIOD.HOUR]"
-							:class="[ { today: df_isSameHour(today, range.start) }, itemClass(range, PERIOD.HOUR) ]"
+							:class="[ { today: df_isSameHour(today, range.start), selected: df_isSameHour(today, range.start) }, itemClass(range, PERIOD.HOUR) ]"
 						>
 							<div class="cellHead">{{df_format(range.start, 'HH')}}<sup>h</sup></div>
 							<slot :item-range="range" :layout="viewLayout[view]"></slot>
@@ -40,7 +40,7 @@
 						<span
 							v-for="arg in [df_addDays(df_startOfWeek(current, dfOptions), x-1)]"
 							v-data:item="[+arg/10000, PERIOD.DAY]"
-							:class="[ { today: df_isSameDay(today, arg) } ]"
+							:class="[ { today: df_isSameDay(today, arg), selected: df_isSameDay(today, arg) } ]"
 						>{{format(arg, 'dd')}}<sub>{{df_getDate(arg)}}</sub></span>
 					</template>
 				</div>
@@ -50,7 +50,7 @@
 						<span
 							v-for="range in [getItemRange(df_addHours(df_addDays(df_startOfWeek(current, dfOptions), x-1), y-1), PERIOD.HOUR)]"
 							v-data:item="[+range.start/10000, PERIOD.HOUR]"
-							:class="[ { thisMonth: df_isSameMonth(current, range.start) }, itemClass(range, PERIOD.HOUR) ]"
+							:class="[ { thisMonth: df_isSameMonth(current, range.start), selected: df_isSameMonth(current, range.start) }, itemClass(range, PERIOD.HOUR) ]"
 						>
 							<slot :item-range="range" :layout="viewLayout[view]"></slot>
 						</span>
@@ -76,7 +76,7 @@
 							v-if="showOverlappingDays || df_isSameMonth(current, range.start)"
 							v-for="range in [getItemRange(df_addDays(firstVisibleDayOfMonthView(current), (y-1) * 7 + (x-1)), PERIOD.DAY)]"
 							v-data:item="[+range.start/10000, PERIOD.DAY]"
-							:class="[ { today: df_isSameDay(today, range.start), notThisMonth: !df_isSameMonth(current, range.start) }, itemClass(range, PERIOD.DAY) ]"
+							:class="[ { today: df_isSameDay(today, range.start), selected: df_isSameDay(today, range.start), notThisMonth: !df_isSameMonth(current, range.start) }, itemClass(range, PERIOD.DAY) ]"
 						>
 							<div class="cellHead" v-text="df_getDate(range.start)"></div>
 							<slot :item-range="range" :layout="viewLayout[view]"></slot>
@@ -92,7 +92,7 @@
 						<span
 							v-for="range in [getItemRange(df_setMonth(current, (y-1)*4 + (x-1)), PERIOD.MONTH)]"
 							v-data:item="[+range.start/10000, PERIOD.MONTH]"
-							:class="[ { today: df_isSameMonth(today, range.start) }, itemClass(range, PERIOD.MONTH) ]"
+							:class="[ { today: df_isSameMonth(today, range.start), selected: df_isSameMonth(today, range.start) }, itemClass(range, PERIOD.MONTH) ]"
 						>
 							<div class="cellHead" v-text="format(range.start, compact ? 'MMM' : 'MMMM')"></div>
 							<slot :item-range="range" :layout="viewLayout[view]"></slot>
@@ -107,7 +107,7 @@
 						<span
 							v-for="range in [getItemRange(df_addYears(current, (y-1)*4 + (x-1) - 9), PERIOD.YEAR)]"
 							v-data:item="[+range.start/10000, PERIOD.YEAR]"
-							:class="[ { today: df_isSameYear(today, range.start) }, itemClass(range, PERIOD.YEAR) ]"
+							:class="[ { today: df_isSameYear(today, range.start), selected: df_isSameYear(today, range.start) }, itemClass(range, PERIOD.YEAR) ]"
 						>
 							<div class="cellHead" v-text="df_getYear(range.start)"></div>
 						</span>

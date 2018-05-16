@@ -395,16 +395,33 @@ export default {
 					this._moveInterval = undefined;
 				}
 			}
-			
-			if ( 'item' in ev.dataAttr ) {
-				
+      
+      if ( 'item' in ev.dataAttr && ev.eventType == "tap" && 
+           ( ev.eventTarget.classList.contains('selection2') ||
+             ev.eventTarget.classList.contains('cellHead') ||
+             ev.eventTarget.classList.contains('events') ||
+             ev.eventTarget.classList.contains('eventRange') )
+      ) {
+        document.querySelectorAll('.calendar .selection2.selected').forEach(cell => {
+          cell.classList.remove('selected');
+        });
+        var selectedNode = ev.eventTarget;
+        while (selectedNode && !selectedNode.classList.contains('selection2')) {
+          selectedNode = selectedNode.parentNode;
+        }
+
+        selectedNode.classList.add('selected');
+      }
+
+      if ( 'item' in ev.dataAttr ) {
 				var value = JSON.parse(ev.dataAttr.item);
 				ev.type = value[1];
 				ev.range = this.getItemRange(df_parse(value[0]*10000), ev.type); // 10000: currently, min resolution is "minute"
 			}
       
       if ( 'view' in ev.dataAttr && ev.eventType === 'tap' && 
-           Number(ev.dataAttr.view) <= this.viewZoomMax && Number(ev.dataAttr.view) >= this.viewZoomMin ) {
+           Number(ev.dataAttr.view) <= this.viewZoomMax && Number(ev.dataAttr.view) >= this.viewZoomMin 
+      ) {
 					
 				this.view = Number(ev.dataAttr.view);
 				return;
