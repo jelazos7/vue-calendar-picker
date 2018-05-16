@@ -5,6 +5,8 @@
 		:view-count="viewCount"
 		:initial-view="initialView"
 		:initial-current="initialCurrent"
+    :view-zoom-min="viewZoomMin"
+    :view-zoom-max="viewZoomMax"
 		:item-class="thisItemClass"
 		
 		:events="events"
@@ -143,7 +145,9 @@ export default {
 		compact: {},
 		viewCount: {},
 		initialView: {},
-		initialCurrent: {},
+    initialCurrent: {},
+    viewZoomMin: {},
+    viewZoomMax: {},
 		selection: {
 			type: Object,
 			default: function() {

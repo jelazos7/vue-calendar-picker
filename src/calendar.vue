@@ -291,6 +291,20 @@ export default {
 			type: Boolean,
 			default: undefined
 		},
+    viewZoomMin: {
+      type: Number,
+      default: PERIOD.MINUTE,
+      validator: function(value) {
+				return value >= PERIOD.MINUTE && value <= PERIOD.DECADE;
+			}
+    },
+    viewZoomMax: {
+      type: Number,
+      default: PERIOD.DECADE,
+      validator: function(value) {
+				return value >= PERIOD.MINUTE && value <= PERIOD.DECADE;
+			}
+    }
 	},
 	
 	data: function() {
@@ -388,15 +402,19 @@ export default {
 				ev.type = value[1];
 				ev.range = this.getItemRange(df_parse(value[0]*10000), ev.type); // 10000: currently, min resolution is "minute"
 			}
-			
-
-			if ( 'view' in ev.dataAttr && ev.eventType === 'tap' ) {
+      
+      if ( 'view' in ev.dataAttr && ev.eventType === 'tap' && 
+           Number(ev.dataAttr.view) <= this.viewZoomMax && Number(ev.dataAttr.view) >= this.viewZoomMin ) {
 					
 				this.view = Number(ev.dataAttr.view);
 				return;
 			}
 
-			if ( !ev.keyActive && ((ev.eventType === 'tap' && ev.type >= PERIOD.MONTH) || (ev.eventType === 'press' && ev.type < PERIOD.MONTH && ev.type > PERIOD.MINUTE )) ) {
+      if ( ev.type <= this.viewZoomMax && ev.type >= this.viewZoomMin &&
+           ( !ev.keyActive && ((ev.eventType === 'tap' && ev.type >= PERIOD.MONTH) || 
+             (ev.eventType === 'press' && ev.type < PERIOD.MONTH && ev.type > PERIOD.MINUTE )) 
+           )
+         ) {
 					
 				this.view = ev.type;
 				this.current = ev.range.start;
